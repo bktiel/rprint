@@ -5,11 +5,12 @@ $MAX_ATTEMPTS=3
 #clean connections
 #net stop workstation /y
 #net start workstation
-#must be on WREN to use script
-$wifi=netsh wlan show interfaces | Select-String '\sSSID'
-if(([string]$wifi).IndexOf("WREN") -eq -1){
+$net=''
+#must be on $net
+$wifi=netsh wlan show interfaces | Select-String '\sSSID' | Out-String
+if(($wifi).IndexOf($net) -eq -1){
 Write-Host "//WARNING//" -ForegroundColor RED
-Write-Host "You are not on the WREN. You must be connected to the WREN to connect to company printers." -ForegroundColor Yellow
+Write-Host "You are not on the "+$net"+". You must be connected to the WREN to connect to company printers." -ForegroundColor Yellow
 $response=Read-Host -Prompt "Continue? (y/n)"
 while($response.ToLower() -ne 'n' -and $response.ToLower() -ne 'y'){
     $response=Read-Host -Prompt "Continue? (y/n)"
@@ -41,7 +42,7 @@ foreach($line in $currentPrinters){
 #ask for deletion or nah. Only ask if they exist.
 if($oldPrinters.Length -gt 0){
     #Clear-Host
-    Write-Host "You currently have"$oldPrinters.Length"old DREN/WPPSS6 printers on your computer that probably won't work"
+    Write-Host "You currently have"$oldPrinters.Length"old printers on your computer that probably won't work"
     $response=Read-Host -Prompt "Delete old printers and declutter? (y/n)"
     while($response.ToLower() -ne 'n' -and $response.ToLower() -ne 'y'){
         $response=Read-Host -Prompt "Continue? (y/n)"
